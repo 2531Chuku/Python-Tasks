@@ -1,39 +1,35 @@
-'''
-Create a Python function that takes a string as input and return the reverse of that string
-
-________________Algorithms Explanation___________________
-
-Since the colon ":" means start at the beginning and go to the end
-To step backwards each time for every character , it uses -1
-To extract the characters from string, method slice() is ideal
-
-Inputs: string
-Output: string
-variable: (stringReversal : function) and userStringInput
-Test Data:
-Nationality => string => ytilanoitaN
-Hello => string => olleH
-
-Event and action:
-invoke stringReversal() => return reversed string
-
-algorithm
-userStringInput -> start from beginning to end of string
-slice the method 
-step: -1
+import requests
+from bs4 import BeautifulSoup
 
 
-___End Results 
-When the user provide a string, that string will be returned backward
-
-'''
-
-def stringReversal(userStringInput):
-  return userStringInput[::-1]
-
-
-# Test cases
-print(stringReversal("Nationality"))
-print(stringReversal("Application"))
+def webScraper(url):
+    try:
+        sendRequest(url)
+    except requests.exceptions.RequestException as e:
+        print(f"Sorry there was an error fetching data from the website: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
 
+def sendRequest(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'html.parser')
+    articles = soup.find_all('h2')
+    results(articles)
+
+    
+
+def results(articles):
+    print("________________Extracted Articles:_____________________________")
+    for index, article in enumerate(articles, start=1):
+        title = article.get_text(strip=True)
+        link = article.find('a')['href'] if article.find('a') else 'No link available'
+        print(f"{index}. Title: {title}\n   Link: {link}")
+        print("-------------------------------------------------------")
+
+url = input("Enter the website URL: ")
+webScraper(url)
+
+
+# Test Case : please use this url : https://webscraper.io/test-sites

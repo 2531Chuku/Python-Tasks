@@ -1,56 +1,69 @@
-'''
-create a python program that convert temperatures between Celsius and Fahrenheit
-prompt the user to enter a temperature value and the unit of measurement and then display the converted temperature
+import pandas as percival
+import plotly.express as px
 
-___________________Algorithm_________________________________
-inputs 
-output
-test data
-events and actions
-variables 
-algorithms 
-pseudo
+def load_dataset(file_path):
+    try:
+        data = percival.read_csv(file_path)
+        data.columns = data.columns.str.strip()  
+        print(f"Dataset loaded successfully. Columns: {list(data.columns)}")
+        print(data.head())  
+        return data
+    except Exception as e:
+        print(f"Error loading dataset: {e}")
+        return None
 
-'''
+
+def userVisualizationChoice():
+    """Generate interactive visualizations based on user choice."""
+    print("\nSelect a type of visualization:")
+    print("1. Scatter Plot")
+    print("2. Line Chart")
+    print("3. Bar Chart")
+    print("4. Histogram")
+    print("5. Box Plot")
+
+
+
+def generate_visualization(data):
+    userVisualizationChoice()
+    choice = input("Enter the number corresponding to your choice: ").strip()
+    x_column = input("Enter the column for the X-axis: ").strip()
+    y_column = input("Enter the column for the Y-axis (if applicable): ").strip()
+    color_column = input("Enter the column for color grouping (optional, press Enter to skip): ").strip()
+
+    try:
+        if choice == '1':
+            fig = px.scatter(data, x=x_column, y=y_column, color=color_column if color_column else None)
+        elif choice == '2':
+            fig = px.line(data, x=x_column, y=y_column, color=color_column if color_column else None)
+        elif choice == '3':
+            fig = px.bar(data, x=x_column, y=y_column, color=color_column if color_column else None)
+        elif choice == '4':
+            fig = px.histogram(data, x=x_column, color=color_column if color_column else None)
+        elif choice == '5':
+            fig = px.box(data, x=x_column, y=y_column, color=color_column if color_column else None)
+        else:
+            print("Invalid choice. Please try again.")
+            return
+        
+        fig.show()
+    except Exception as e:
+        print(f"Error generating visualization: {e}")
+
 def main():
-  print('User is Expected to user this application as follows To convert from Celsius_to_fahrenheit enter value 1, Fahrenheit_to_celsius enter value 2, to Quit use 3 ')
+    print("Welcome to the Interactive Visualization Tool")
+    file_path = input("Enter the path to your CSV file: ").strip()
+    data = load_dataset(file_path)
+    
+    if data is not None:
+        while True:
+            generate_visualization(data)
+            again = input("\nDo you want to create another visualization? (yes/no): ").strip().lower()
+            if again != 'yes':
+                print("Thank you for using the tool!")
+                break
 
-  userChoice = int(input("Please enter your choice(1,2,3) : "))
-  userChoices(userChoice)
+if __name__ == "__main__":
+    main()
 
-
-def Celsius_to_fahrenheit(celsius):
-  return (celsius * 9/5) + 32
-
-def Fahrenheit_to_celsius(fahrenheit):
-  return (fahrenheit - 32) * 5/9
-
-def fahrenheitConversion():
-  celsius = float(input('Enter the temperature in celsius : '))
-  fahrenheitTemp = Celsius_to_fahrenheit(celsius)
-  print(f"{celsius}°C is equal to {round(fahrenheitTemp,2)}°F ")
-
-def celsiusConversion():
-  fahrenheit = float(input('Enter the temperature in fahrenheit : '))
-  celsiusTemp = Fahrenheit_to_celsius(fahrenheit)
-  print(f"{fahrenheit}°F is equal to {round(celsiusTemp,2)}°C")
-  
-def userQuit():
-  print("Thank you for using our application")
-
-def userChoices(userChoice):
-  while True:
-    if userChoice == 1:
-      fahrenheitConversion()
-      break
-    elif userChoice == 2:
-      celsiusConversion()
-      break
-    elif userChoice == 3:
-      userQuit()
-      break
-    else:
-      print("Invalid choice,Please try again")
-
-# invoke method
-main()
+# Test case: make use of the CSV files folder 
