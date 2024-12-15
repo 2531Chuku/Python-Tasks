@@ -1,56 +1,62 @@
+import random
 '''
-create a python program that convert temperatures between Celsius and Fahrenheit
-prompt the user to enter a temperature value and the unit of measurement and then display the converted temperature
+create a number guessing game where the program generate a random number between specified range and the user tries to guess. it provide the  feedback  to the user if their guess is too high or low
 
-___________________Algorithm_________________________________
-inputs 
-output
-test data
-events and actions
-variables 
-algorithms 
-pseudo
+_________________________________Algorithms__________________________________________
+
 
 '''
-def main():
-  print('User is Expected to user this application as follows To convert from Celsius_to_fahrenheit enter value 1, Fahrenheit_to_celsius enter value 2, to Quit use 3 ')
 
-  userChoice = int(input("Please enter your choice(1,2,3) : "))
-  userChoices(userChoice)
+def number_guessing_game():
+    print("Welcome to the number guessing game.")
+    prompt_user_to_enter_range()
+    
 
-
-def Celsius_to_fahrenheit(celsius):
-  return (celsius * 9/5) + 32
-
-def Fahrenheit_to_celsius(fahrenheit):
-  return (fahrenheit - 32) * 5/9
-
-def fahrenheitConversion():
-  celsius = float(input('Enter the temperature in celsius : '))
-  fahrenheitTemp = Celsius_to_fahrenheit(celsius)
-  print(f"{celsius}°C is equal to {round(fahrenheitTemp,2)}°F ")
-
-def celsiusConversion():
-  fahrenheit = float(input('Enter the temperature in fahrenheit : '))
-  celsiusTemp = Fahrenheit_to_celsius(fahrenheit)
-  print(f"{fahrenheit}°F is equal to {round(celsiusTemp,2)}°C")
-  
-def userQuit():
-  print("Thank you for using our application")
-
-def userChoices(userChoice):
+def play_game(number_to_guess, tries):
   while True:
-    if userChoice == 1:
-      fahrenheitConversion()
-      break
-    elif userChoice == 2:
-      celsiusConversion()
-      break
-    elif userChoice == 3:
-      userQuit()
-      break
-    else:
-      print("Invalid choice,Please try again")
+      try:
+          user_guess = int(input("Take a guess: "))
+          tries += 1
+          
+          if user_guess < number_to_guess:
+              print("Too low!")
+          elif user_guess > number_to_guess:
+              print("Too high!")
+          else:
+              print(f"Congratulations! You guessed the number {number_to_guess} in {tries} tries.")
+              break
+      except ValueError:
+          print("That's not a valid number. Please enter a valid integer.")
 
-# invoke method
-main()
+
+def prompt_user_to_enter_range():
+  while True:
+        try:
+            lower_bound = int(input("Enter the lower bound of the range: "))
+            upper_bound = int(input("Enter the upper bound of the range: "))
+            
+            if lower_bound >= upper_bound:
+                print("The lower bound must be less than the upper bound. Please try again.")
+                continue
+            
+            number_to_guess = random.randint(lower_bound, upper_bound)
+            tries = 0
+            
+            print(f"I have picked a number between {lower_bound} and {upper_bound}. Can you guess it?")
+            
+            play_game(number_to_guess,tries)
+            prompt_user_to_play_again()
+        
+        except ValueError:
+            print("That's not a valid number. Please enter integers for the range.")
+
+
+def prompt_user_to_play_again():
+  play_again = input("Do you want to play again? (yes/no): ").strip().lower()
+  if play_again != 'yes':
+      print("Thank you for playing! Goodbye!")
+      return
+
+
+if __name__ == "__main__":
+    number_guessing_game()

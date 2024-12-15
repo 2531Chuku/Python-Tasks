@@ -1,79 +1,34 @@
-
 '''
-Calculator program
+write a python function  that generate the fibonacci sequence  up to a given  number of terms. the function  should take  an integer input  from the user  and display  the fibonacci sequence  up to  that number of terms
 
-Create a  python program that acts as a basic calculator. it should prompt the user to enter tWo numbers and  an operator(+,-,/,%,*) and then display the results of the operation
-
-___________________Algorithm_______________________
+________________________________Algorithms_____________________________________
 
 '''
 
+def handleError():
+  while True:
+    try:
+      num_terms = int(input("Enter number of terms : "))
+      if num_terms <= 0:
+        print("Please enter a positive integer")
+      else:
+        break
+    except ValueError:
+      print("That's not a valid number")
+  return num_terms
 
-def calculator():
-  print("Instructions:\n Choices : 1,2,3,4,5 \n \n 1 is for Addition \n 2 is for Subtraction \n 3 is for Multiplication \n 4 is for Division \n 5 is for Modulus \n ")
-
-  userChoice = int(input("Enter your choice (1/2/3/4/5): "))
-  promptUser_for_choices(userChoice)
-
-
-def promptUser_for_choices(userChoice):
-  if userChoice in (1,2,3,4,5):
-    number1, number2, operator =twoOperand()
-    operationResults(userChoice, operator,number1, number2)
-  else:
-    print("Invalid Choice")
-    promptUser_about_Continuing_using_Calculator()
-
-
-def twoOperand():
-  number1 = float(input("Enter first number : "))
-  number2 = float(input('Enter second number : '))
-  operator = input("Enter the operator : ")
-  return number1, number2, operator
+def performOperations(fibonacci_sequence , num_terms):
+  while len(fibonacci_sequence) < num_terms:
+    next_term = fibonacci_sequence[-1] + fibonacci_sequence[-2]
+    fibonacci_sequence.append(next_term)
 
 
+def generate_fibonacci_sequence():
+  num_terms = handleError()
+  fibonacci_sequence = [0,1]
+  performOperations(fibonacci_sequence, num_terms)
+  print(f"The Fibonacci sequence up to {num_terms} terms is:")
+  print(fibonacci_sequence[:num_terms])
 
-def operationResults(userChoice, operator, number1, number2):
-  if userChoice == 1 and operator == "+":
-      print(number1, "+", number2,"=", sum_operation(number1, number2))
-  elif userChoice == 2 and operator == "-":
-    print(number1, "-" , number2,"=", difference_operation(number1, number2))
-  elif userChoice == 3 and operator == "*":
-    print(number1, "*", number2,"=", product_operation(number1, number2))
-  elif userChoice == 4 and operator == "/":
-      divide_by_zero(number1, number2)
-  elif userChoice == 5 and operator == "%":
-      print(number1, "%", number2,"=", remainder_operation(number1, number2))
-
-
-def divide_by_zero(number1, number2):
-  if number2 != 0:
-    print(number1, "/", number2,"=", division_operation(number1, number2))
-  else:
-    print("Error!, Division by zero is not allowed")
-
-
-def promptUser_about_Continuing_using_Calculator():
-  userContinue = input("Do you want to continue? (yes/no):")
-  if userContinue.lower() == 'yes':
-    calculator()
-  else:
-    print("Have a good day")
-
-def sum_operation(value, value2):
-  return value + value2
-
-def difference_operation(value, value2):
-  return value - value2
-
-def division_operation(value, value2):
-  return value / value2
-
-def product_operation(value, value2):
-  return value * value2
-
-def remainder_operation(value, value2):
-  return value % value2
-
-calculator()
-
+# Invoke
+generate_fibonacci_sequence()
